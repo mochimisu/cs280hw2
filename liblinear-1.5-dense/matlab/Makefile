@@ -1,6 +1,6 @@
 # This Makefile is used under Linux
 
-MATLABDIR ?= /usr/sww/pkg/matlab-r2008a
+MATLABDIR ?= /Applications/MATLAB_R2011b.app
 CXX ?= g++
 #CXX = g++-3.3
 CC ?= gcc
