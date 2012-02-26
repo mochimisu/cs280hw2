@@ -1,8 +1,8 @@
-function results = q1(use_full)
+function results = q2(use_full)
   if nargin < 1
     use_full = false;
   end
-  results = run_svm(@pixel_features, use_full);
+  results = run_svm(@pyramid_features, use_full);
   
   sample_axis = [100 200 500 1000 2000 5000 10000 60000]
   if not(use_full)
