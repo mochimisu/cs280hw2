@@ -8,13 +8,14 @@ function results = run_svm(feature_func, use_full)
   for i = 1:7
     params = train_svm(feature_func, train{i});
     pred_labels = predict_svm(feature_func, params, test);
-    results(i) = num_correct(pred_labels, test.labels);
+    %benchmark(pred_labels, test.labels);
+    results(i) = num_correct(pred_labels, test.labels)
   end
   if use_full
     load('train.mat');
     params = train_svm(feature_func, train);
     pred_labels = predict_svm(feature_func, params, test);
-    results(8) = num_correct(pred_labels, test.labels);
+    results(8) = num_correct(pred_labels, test.labels)
   end
 end
 

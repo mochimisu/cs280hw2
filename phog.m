@@ -21,15 +21,52 @@ function features = phog_helper(image_horiz, image_vert, window_size)
   features = reshape(features, [], 1);
 end
 
+function features = phog_helper2(hr, vr, kern)
+    [width, height] = size(hr);
+    overlap = floor(kern/2);
+    new_width = floor(width/overlap)-1;
+    new_height = floor(height/overlap)-1;
+    num_buckets = 9;
+
+    feat = zeros(new_width, new_height, num_buckets);
+    parfor i = 1:new_width-kern
+        for j = 1:new_height-kern
+            effi = i*overlap;
+            effj = j*overlap;
+            xrange = effi:(effj+kern-1);
+            yrange = effj:(effj+kern-1);
+            window_horiz = hr(xrange, yrange);
+            window_vert = vr(xrange, yrange);
+
+            angles = arrayfun(@(hr, vr) atan2(hr, vr), window_horiz, window_vert);
+            buckets = angles / (2*pi/num_buckets);
+
+            for k = 1:num_buckets
+                feat(i,j,k) = sum(sum((buckets == (i-1))));
+            end
+        end
+    end
+
+    features = double(reshape(feat,[],1));
+    features = features / sum(features);
+
+end
+
 function hist = count_orientations(window_horiz, window_vert)
-  magnitudes = arrayfun(@(hr, vr) sqrt(hr^2 + vr^2), window_horiz, window_vert);
+  %magnitudes = arrayfun(@(hr, vr) sqrt(hr^2 + vr^2), window_horiz, window_vert);
   orientations = arrayfun(@(hr, vr) atan2(hr, vr), window_horiz, window_vert);
-  orientations = floor(orientations * (2 * pi / 9));
+  orientations = floor(orientations / (2 * pi / 9));
   results = zeros(9, 1);
   for i = 1:9
-    results(i) = sum(sum(magnitudes .* (orientations == (i - 1))));
+    %results(i) = sum(sum(magnitudes .* (orientations == (i - 1))));
+    results(i) = sum(sum((orientations == (i - 1))));
   end
-  hist = results / sum(results);
+  summed_results = sum(results);
+  if(summed_results > 0)
+    hist = results / summed_results;
+  else
+    hist = results;
+  end
 end
 
 function [hr, vr] = responses(image)
