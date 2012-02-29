@@ -22,11 +22,12 @@ function features = phog_helper(image_horiz, image_vert, window_size)
 end
 
 function hist = count_orientations(window_horiz, window_vert)
+  magnitudes = arrayfun(@(hr, vr) sqrt(hr^2 + vr^2), window_horiz, window_vert);
   orientations = arrayfun(@(hr, vr) atan2(hr, vr), window_horiz, window_vert);
   orientations = floor(orientations * (2 * pi / 9));
   results = zeros(9, 1);
   for i = 1:9
-    results(i) = sum(orientations(:) == (i - 1));
+    results(i) = sum(sum(magnitudes .* (orientations == (i - 1))));
   end
   hist = results / sum(results);
 end
