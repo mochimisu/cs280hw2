@@ -20,7 +20,7 @@ function features=pyramid_feature_helper(image,kernel_size)
     
     feat = zeros(new_width, new_height);
     
-    for i = 1:new_width
+    parfor i = 1:new_width
         for j = 1:new_height
             effX = i*overlap_disp;
             effY = j*overlap_disp;

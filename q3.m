@@ -17,10 +17,11 @@ function results = q3(use_full)
 end
 
 function features = phog_features(images)
+    %new_size = 2286;
     new_size = 2214;
     max = size(images,3);
     features = zeros(new_size, max);
-    for i = 1:max
+    parfor i = 1:max
         features(:,i) = double(phog(images(:,:,i)));
     end;
 end
