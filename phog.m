@@ -37,3 +37,14 @@ function [hr, vr] = responses(image)
   hr = convn(image, tap);
   vr = convn(image, tap');
 end
+
+function y = gauss_deriv(x)
+  sigma = 2;
+  y = (1 / (sigma * sqrt(2 * pi))) * -x * exp(- x^2 / (2 * sigma^2));
+end
+
+function [hr, vr] = gauss_responses(image)
+  filter = arrayfun(@gauss_deriv, -10:10);
+  hr = convn(image, filter);
+  vr = convn(image, filter');
+end
