@@ -6,10 +6,21 @@ function img = q3_single()
   load('test.mat');
   
   feature_func = @phog_features
+  t_start = tic;
 
+  display('Training SVM...')
   params = train_svm(feature_func, train{7});
+  display('Trained in')
+  display(toc(t_start));
+  t_predict = tic;
 
+  display('Predicting...')
   pred_labels = predict_svm(feature_func, params, test);
+  display('Predicted in')
+  display(toc(t_predict));
+  display('Total:')
+  display(toc(t_start));
+
 
   [err, wrong] = benchmark(pred_labels, test.labels);
 
