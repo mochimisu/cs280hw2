@@ -10,12 +10,12 @@ function results = q3(gauss_filter, normalize, use_full)
   end
   fn = @phog_features
   if not(normalize)
-    fn = @phog_features_unnormalized;
+    fn = @phog_features_unnormalized
   end
   if gauss_filter
-    fn = @phog_features_gauss;
+    fn = @phog_features_gauss
   end
-  results = run_svm(@phog_features, use_full);
+  results = run_svm(fn, use_full);
   
   sample_axis = [100 200 500 1000 2000 5000 10000 60000];
   error_max = [1 1 1 1 1 1 1 1];
