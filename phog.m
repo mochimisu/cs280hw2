@@ -22,9 +22,57 @@ function [hr, vr] = gauss_responses(image)
   vr = convn(image, filter');
 end
 
+%O(nk): not yet working..
+function features = phog_helper(hr, vr, kern)
+    [width, height] = size(hr);
+    overlap = floor(kern/2);
+    new_width = floor(width/overlap)-1;
+    new_height = floor(height/overlap)-1;
+    num_buckets = 9;
+
+    angles = arrayfun(@(hr, vr) atan2(hr, vr), hr, vr);
+    buckets = floor(angles / (2 * pi / num_buckets));
+
+    feat = zeros(new_width, new_height, num_buckets);
+
+    %summed area
+    padded_width = width + 2*overlap;
+    padded_height = height + 2*overlap;
+    summed_area = zeros(num_buckets, padded_width, padded_height);
+
+    parfor i = 1:num_buckets
+        summed_area(i,:,:) = padarray(cumsum(cumsum((buckets==i),1),2), [overlap overlap]);
+    end
+
+    parfor i = 1:new_width
+        for j = 1:new_height
+            effi = i*overlap;
+            effj = j*overlap;
+
+            results = zeros(num_buckets,1);
+
+            for k = 1:num_buckets
+                results(k) = summed_area(k,effi+kern, effj+kern) + ...
+                summed_area(k,effi,effj) - summed_area(k,effi+kern, effj) - ...
+                summed_area(k,effi, effj+kern); 
+            end
+            summed_results = sum(results)
+            if(summed_results > 0)
+              feat(i,j,:) = results / summed_results;
+            else
+              feat(i,j,:) = results;
+            end
+
+        end
+    end
+
+    features = double(reshape(feat,[],1));
+
+end
+
 
 %O(nk^2), n: image size, kxk kernel
-function features = phog_helper(hr, vr, kern)
+function features = phog_helpersq(hr, vr, kern)
     [width, height] = size(hr);
     overlap = floor(kern/2);
     new_width = floor(width/overlap)-1;
@@ -53,54 +101,6 @@ function features = phog_helper(hr, vr, kern)
               feat(i,j,:) = results / summed_results;
             else
               feat(i,j,:) = results;
-            end 
-
-        end
-    end
-
-    features = double(reshape(feat,[],1));
-
-end
-
-%O(nk): not yet working..
-function features = phog_helpersummedarea(hr, vr, kern)
-    [width, height] = size(hr);
-    overlap = floor(kern/2);
-    new_width = floor(width/overlap)-1;
-    new_height = floor(height/overlap)-1;
-    num_buckets = 9;
-
-    angles = arrayfun(@(hr, vr) atan2(hr, vr), hr, vr);
-    buckets = floor(angles / (2 * pi / num_buckets));
-
-    feat = zeros(new_width, new_height, num_buckets);
-    
-    %summed area
-    padded_width = width + 2*overlap;
-    padded_height = height + 2*overlap;
-    summed_area = zeros(num_buckets, padded_width, padded_height);
-
-    parfor i = 1:num_buckets
-        summed_area(i,:,:) = padarray(cumsum(cumsum(double(buckets),1),2), [overlap overlap]);
-    end
-
-    parfor i = 1:new_width
-        for j = 1:new_height
-            effi = i*overlap;
-            effj = j*overlap;
-
-            results = zeros(num_buckets,1);
-
-            for k = 1:num_buckets
-                results(k) = summed_area(k,effi+kern, effj+kern) + ...
-                summed_area(k,effi,effj) - summed_area(k,effi+kern, effj) - ...
-                summed_area(k,effi, effj+kern); 
-            end
-            summed_results = sum(results)
-            if(summed_results > 0)
-              feat(i,j,:) = results / summed_results;
-            else
-              feat(i,j,:) = results;
             end
 
         end
@@ -109,6 +109,8 @@ function features = phog_helpersummedarea(hr, vr, kern)
     features = double(reshape(feat,[],1));
 
 end
+
+
 
 %old
 function features = phog_helperold(image_horiz, image_vert, window_size)
