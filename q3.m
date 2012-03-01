@@ -18,7 +18,7 @@ end
 
 function features = phog_features(images)
     %new_size = 2286;
-    new_size = 2214;
+    new_size = 2097;
     max = size(images,3);
     features = zeros(new_size, max);
     parfor i = 1:max
