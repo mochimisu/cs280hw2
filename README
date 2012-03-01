@@ -1,2 +1,6 @@
 Q1: run q1()
 Q2: run q2()
+Q3:
+  Normalized    q3(false, true, false)
+  Unnormalized  q3(false, false, false)
+  Gaussian      q3(true, true, false)
