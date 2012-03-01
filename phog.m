@@ -16,12 +16,12 @@ function [hr, vr] = responses(image)
 end
 
 function y = gauss_deriv(x)
-  sigma = 2;
+  sigma = 0.5;
   y = (1 / (sigma * sqrt(2 * pi))) * -x * exp(- x^2 / (2 * sigma^2));
 end
 
 function [hr, vr] = gauss_responses(image)
-  filter = arrayfun(@gauss_deriv, -10:10);
+  filter = arrayfun(@gauss_deriv, -3:3);
   hr = convn(image, filter, 'same');
   vr = convn(image, filter', 'same');
 end
