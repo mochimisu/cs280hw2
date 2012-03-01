@@ -1,6 +1,19 @@
-function results = q3(use_full)
+function results = q3(gauss_filter, normalize, use_full)
   if nargin < 1
+    gauss_filter = false;
+  end
+  if nargin < 2
+    noramlize = true;
+  end
+  if nargin < 3
     use_full = false;
+  end
+  fn = @phog_features
+  if not(normalize)
+    fn = @phog_features_unnormalized;
+  end
+  if gauss_filter
+    fn = @phog_features_gauss;
   end
   results = run_svm(@phog_features, use_full);
   
@@ -17,11 +30,30 @@ function results = q3(use_full)
 end
 
 function features = phog_features(images)
-    %new_size = 2286;
     new_size = 2097;
     max = size(images,3);
     features = zeros(new_size, max);
     parfor i = 1:max
-        features(:,i) = double(phog(images(:,:,i)));
+        features(:,i) = double(phog(images(:,:,i), false, true));
     end;
 end
+
+function features = phog_features_unnormalized(images)
+    new_size = 2097;
+    max = size(images,3);
+    features = zeros(new_size, max);
+    parfor i = 1:max
+        features(:,i) = double(phog(images(:,:,i), false, false));
+    end;
+end
+
+function features = phog_features_gauss(images)
+    new_size = 2097;
+    max = size(images,3);
+    features = zeros(new_size, max);
+    parfor i = 1:max
+        features(:,i) = double(phog(images(:,:,i), true, true));
+    end;
+end
+
+
