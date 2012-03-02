@@ -1,7 +1,4 @@
 function img = q3_single()
-  if nargin < 2
-      use_full = false;
-  end
   load('train_small.mat');
   load('test.mat');
   
