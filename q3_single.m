@@ -54,6 +54,6 @@ function features = phog_features(images)
     max = size(images,3);
     features = zeros(new_size, max);
     parfor i = 1:max
-        features(:,i) = double(phog(images(:,:,i), false, true));
+        features(:,i) = double(phog(images(:,:,i), true, true));
     end;
 end

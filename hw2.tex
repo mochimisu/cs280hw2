@@ -61,10 +61,12 @@
 
 % Start of document
 \begin{document}
-\section*{Q1}
+\section*{Q1: Raw Pixel}
+  All graphs in this homework plot the number of samples as the x-axis, and the 
+  error rate as the y-axis.
   \begin{enumerate}[a.]
     \item \quad \\
-      \includegraphics[scale=0.3]{q1_pixel_error.jpg}
+      \includegraphics[scale=0.35]{q1_pixel_error.jpg}
       \begin{tabular}{l|l}
         \hline
         Training Samples & Error Rate \\
@@ -80,7 +82,7 @@
       \end{tabular}
   \end{enumerate}
 \newpage
-\section*{Q2}
+\section*{Q2: Spatial Pyramids}
   \begin{enumerate}[a]
     \item Adding spatial pyramid features should help over raw pixel values for
       a number of reasons. First, using pyramids allows us to examine an image
@@ -93,7 +95,7 @@
       high intensity pixels will stay high intensity with larger window sizes,
       whereas lone high intensity pixels will be smoothed out.
     \item \quad \\
-      \includegraphics[scale=0.3]{q2_full.jpg}
+      \includegraphics[scale=0.35]{q2_full.jpg}
       \begin{tabular}{l|l}
         \hline
         Training Samples & Error Rate \\
@@ -121,7 +123,7 @@
       whereas a '0' is likely to have strong gradients in all directions further
       away from the center.
     \item \quad \\
-      \includegraphics[scale=0.3]{q3_normalized_tap.jpg}
+      \includegraphics[scale=0.35]{q3_normalized_tap.jpg}
       \begin{tabular}{l|l}
         \hline
         Training Samples & Error Rate \\
@@ -148,7 +150,7 @@
       rely more heavily on the $7 \times 7$ features than the smaller $4 \times
       4$ ones. By normalizing, we eliminate this disparity so that each feature
       contributes proportionally to the computed distance. \\
-      \includegraphics[scale=0.3]{q3_unnormalized.jpg}
+      \includegraphics[scale=0.35]{q3_unnormalized.jpg}
       \begin{tabular}{l|l}
         \hline
         Training Samples & Error Rate \\
@@ -167,7 +169,7 @@
 \section*{Q3: PHOG Normalized Gauss Filter}
   \begin{enumerate}[d.]
     \item \quad \\
-      \includegraphics[scale=0.3]{q3_normalized_gauss.jpg}
+      \includegraphics[scale=0.35]{q3_normalized_gauss.jpg}
       \begin{tabular}{l|l}
         \hline
         Training Samples & Error Rate \\
@@ -188,9 +190,18 @@
   \includegraphics[scale=0.75]{q4_phog_normalized_err.jpg}
   \end{center}
   We believe these errors to be reasonable. 
-  As humans, we had issues discerning up to 25\% of these errors.
- 
-  
+  As humans, we have issues discerning up to 25\% of these errors, especially
+  when there are uncompleted marks, or marks outside of the digit.
 
+\newpage
+\section*{Summary}
+  \includegraphics[scale=0.7]{allgraphs_sm.jpg}
+  Our Gaussian PHOG filter performed the best, with an error rate of about 4.3\%
+   using the 10000-sample training set.
+
+  We used summed area tables in implementing the filters in Matlab. Our program
+  trains against the 10000-sample training set in about 3 minutes, and test 
+  against the 10000-sample test set in another 3 minutes, allowing us to test 
+  our filters using the 7th training set in $train_small.mat$ in about 6 minutes.
 
 \end{document}
