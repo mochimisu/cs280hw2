@@ -35,7 +35,6 @@ function features = phog_helper(hr, vr, kern, normalize)
     num_buckets = 9;
 
     angles = arrayfun(@(hr, vr) atan2(hr, vr), hr, vr);
-    magnitudes = arrayfun(@(hr, vr) norm([hr, vr]), hr, vr);
     buckets = floor(angles / (2 * pi / num_buckets));
 
     feat = zeros(new_width, new_height, num_buckets);
@@ -46,7 +45,7 @@ function features = phog_helper(hr, vr, kern, normalize)
     summed_area = zeros(num_buckets, padded_width, padded_height);
 
     parfor i = 1:num_buckets
-        summed_area(i,:,:) = padarray(cumsum(cumsum((magnitudes .* (buckets==i)),1),2), [overlap overlap]);
+        summed_area(i,:,:) = padarray(cumsum(cumsum((buckets==i),1),2), [overlap overlap]);
     end
 
     parfor i = 1:new_width
