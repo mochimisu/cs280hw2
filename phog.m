@@ -21,7 +21,7 @@ function y = gauss_deriv(x)
 end
 
 function [hr, vr] = gauss_responses(image)
-  filter = arrayfun(@gauss_deriv, -3:3);
+  filter = arrayfun(@gauss_deriv, -1:1);
   hr = convn(image, filter, 'same');
   vr = convn(image, filter', 'same');
 end
