@@ -140,12 +140,14 @@
 \newpage
 \section*{Q3: PHOG Unnormalized Tap Filter}
   \begin{enumerate}[c.]
-    \item Performing this normalization allows us to ignore absolute gradient
-      values and focus on the relative changes. This allows for better
-      invariance across images, since some images are darker than
-      others. Without normalization, a dark digit produces a feature vector with
-      a much larger norm than a light digit, which may cause them to seem
-      different when they actually portray the same digit. \\
+    \item Features corresponding to counts in the $7 \times 7$ windows will have
+      larger values than features corresponding to counts in the $4 \times 4$
+      windows, simply by virtue of the fact that larger windows have more
+      pixels. This means that the $7 \times 7$ window features span a larger
+      range, which in turn means that distances computed between examples will
+      rely more heavily on the $7 \times 7$ features than the smaller $4 \times
+      4$ ones. By normalizing, we eliminate this disparity so that each feature
+      contributes proportionally to the computed distance. \\
       \includegraphics[scale=0.3]{q3_unnormalized.jpg}
       \begin{tabular}{l|l}
         \hline
